@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geheim Admin Panel - MyBlueRosa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0a0a0a;color:#fff} input,select,textarea{background:#1a1a1a;border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:12px;padding:10px 14px;width:100%}</style>
+</head>
+<body class="min-h-screen">
+<header class="sticky top-0 z-50 bg-black border-b border-white/10 px-4 py-3 flex items-center gap-3">
+  <span class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center font-black text-sm">mybr</span>
+  <span class="font-black">Admin Panel (versteckt)</span>
+  <span class="text-xs opacity-50 ml-2">geheim-admin-panel.html - nicht verlinken!</span>
+  <a href="index.html" class="ml-auto text-xs px-3 py-1 rounded-full bg-white text-black font-bold">→ Marktplatz</a>
+</header>
+
+<main class="max-w-5xl mx-auto p-4 md:p-8 space-y-8">
+
+  <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-[16px] p-4 text-sm">
+    <strong>⚠️ Versteckt:</strong> Diese Seite ist nicht im Footer verlinkt. Nur du kennst die URL <code class="bg-black px-2 py-1 rounded">/geheim-admin-panel.html</code>. Hier nur HTML-Formulare - JS Logik kommt später für DB Anbindung.
+  </div>
+
+  <!-- 1. Design Anpassung -->
+  <section class="bg-white text-black rounded-[20px] p-6 md:p-8">
+    <h2 class="text-xl font-black mb-1">🎨 Design-Anpassung</h2>
+    <p class="text-sm opacity-60 mb-6">Für Hauptfarbe und Banner auf Startseite - später per JS an DB anbinden</p>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="text-xs font-bold uppercase opacity-70">Hauptfarbe (id="hauptfarbe")</label>
+        <div class="mt-2 flex gap-3 items-center">
+          <input type="color" id="hauptfarbe" value="#000000" class="w-20 h-12 p-1 cursor-pointer">
+          <input type="text" id="hauptfarbe-hex" placeholder="#000000" class="flex-1" value="#000000">
+        </div>
+        <p class="text-xs opacity-50 mt-2">Wird später: localStorage.setItem('mybr_hauptfarbe', ...) + CSS Variable</p>
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase opacity-70">Banner-Text Startseite (id="banner-text")</label>
+        <textarea id="banner-text" rows="3" placeholder="Großer Banner-Text für Startseite z.B. Willkommen bei MyBlueRosa - Dein lokaler Marktplatz" class="mt-2 resize-none"></textarea>
+        <p class="text-xs opacity-50 mt-2">Wird später: document.getElementById('banner-text-display').innerText = ...</p>
+      </div>
+    </div>
+    <button id="design-speichern-btn" class="mt-6 px-6 py-2 rounded-full bg-black text-white font-bold text-sm">Design speichern (DB später)</button>
+  </section>
+
+  <!-- 2. Kategorien Verwaltung -->
+  <section class="bg-white text-black rounded-[20px] p-6 md:p-8">
+    <h2 class="text-xl font-black mb-1">📂 Kategorien-Verwaltung</h2>
+    <p class="text-sm opacity-60 mb-6">Neue Haupt- und Unterkategorien hinzufügen - später per JS in DB</p>
+    
+    <div class="space-y-6">
+      <div class="border border-black/10 rounded-[16px] p-5">
+        <h3 class="font-bold mb-3">Hauptkategorie hinzufügen</h3>
+        <div class="flex gap-3">
+          <input type="text" id="hauptkategorie-input" placeholder="z.B. Haushalt" class="flex-1 !bg-white !text-black !border-black/20">
+          <button id="hauptkategorie-btn" class="px-5 py-2 rounded-full bg-black text-white font-bold text-sm whitespace-nowrap">Hinzufügen</button>
+        </div>
+        <div id="hauptkategorien-liste" class="mt-4 flex flex-wrap gap-2 text-xs">
+          <!-- Wird per JS befüllt: z.B. <span class='px-3 py-1 bg-black/5 rounded-full'>Haushalt</span> -->
+        </div>
+      </div>
+
+      <div class="border border-black/10 rounded-[16px] p-5">
+        <h3 class="font-bold mb-3">Unterkategorie hinzufügen</h3>
+        <div class="grid md:grid-cols-2 gap-3">
+          <select id="unterkategorie-parent" class="!bg-white !text-black !border-black/20">
+            <option value="">Hauptkategorie wählen</option>
+            <option>Haushalt</option>
+            <option>Damen</option>
+            <option>Herren</option>
+            <option>Schuhe</option>
+            <option>Dienstleistungen</option>
+            <option>Restaurants</option>
+            <option>Elektronik</option>
+            <option>Makeup</option>
+            <option>Apotheken</option>
+            <option>Möbel</option>
+          </select>
+          <input type="text" id="unterkategorie-input" placeholder="z.B. Elektronikgeräte, Möbel, Ausstattung" class="!bg-white !text-black !border-black/20">
+        </div>
+        <button id="unterkategorie-btn" class="mt-3 px-5 py-2 rounded-full bg-black text-white font-bold text-sm">Unterkategorie hinzufügen</button>
+        <div id="unterkategorien-liste" class="mt-4 flex flex-wrap gap-2 text-xs"></div>
+        <p class="text-xs opacity-50 mt-3">Später: DB Tabelle categories {id, name, parentId} + Suchindex</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Store Radio / Musik -->
+  <section class="bg-white text-black rounded-[20px] p-6 md:p-8">
+    <h2 class="text-xl font-black mb-1">♫ Store Radio - Tracks Verwaltung</h2>
+    <p class="text-sm opacity-60 mb-6">Tracks für Marktplatz Radio - kein Autoplay, Kunde muss Play drücken</p>
+    <div class="grid md:grid-cols-3 gap-3">
+      <input type="text" id="track-title" placeholder="Titel" class="!bg-white !text-black !border-black/20">
+      <input type="text" id="track-url" placeholder="MP3 URL https://..." class="!bg-white !text-black !border-black/20">
+      <button id="track-add-btn" class="px-5 py-2 rounded-full bg-black text-white font-bold text-sm">Track hinzufügen</button>
+    </div>
+    <div id="track-liste" class="mt-4 space-y-2 text-sm"></div>
+    <p class="text-xs opacity-50 mt-3">Speicherung: localStorage mybr_adminTracks JSON [{title, url}] -> index.html liest aus</p>
+  </section>
+
+  <!-- 4. DB Anbindung Hinweise -->
+  <section class="bg-white/5 border border-white/10 rounded-[20px] p-6 md:p-8">
+    <h2 class="text-xl font-black mb-4">🔌 Datenbank Anbindung - Vorbereitung (für später)</h2>
+    <div class="grid md:grid-cols-2 gap-6 text-xs leading-relaxed opacity-80">
+      <div>
+        <h4 class="font-bold text-sm mb-2">Startseite index.html hat:</h4>
+        <ul class="list-disc pl-5 space-y-1 font-mono">
+          <li>input id="suchfeld"</li>
+          <li>button id="such-btn"</li>
+          <li>div id="such-ergebnisse"</li>
+          <li>id="hauptfarbe" + id="banner-text" im Admin</li>
+        </ul>
+        <p class="mt-3">Später: <br><code>const q = document.getElementById('suchfeld').value;<br>const res = await db.search(q);<br>document.getElementById('such-ergebnisse').innerHTML = render(res);</code></p>
+      </div>
+      <div>
+        <h4 class="font-bold text-sm mb-2">Admin schreibt in localStorage / DB:</h4>
+        <ul class="list-disc pl-5 space-y-1 font-mono">
+          <li>mybr_hauptfarbe</li>
+          <li>mybr_bannerText</li>
+          <li>mybr_categories [{name, parent}]</li>
+          <li>mybr_adminTracks [{title, url}]</li>
+          <li>mybr_products [{id, title: "Staubsauger Bluebuster", category, sellerId}]</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// Nur optische Vorbereitung - Logik später
+document.getElementById('hauptfarbe')?.addEventListener('input', e=>{
+  document.getElementById('hauptfarbe-hex').value = e.target.value;
+});
+document.getElementById('hauptfarbe-hex')?.addEventListener('input', e=>{
+  document.getElementById('hauptfarbe').value = e.target.value;
+});
+// Platzhalter Buttons - später echte DB Anbindung
+document.getElementById('design-speichern-btn')?.addEventListener('click', ()=>alert('Später: Design in DB speichern'));
+document.getElementById('hauptkategorie-btn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('hauptkategorie-input').value.trim();
+  if(!v) return;
+  const list = document.getElementById('hauptkategorien-liste');
+  const span = document.createElement('span'); span.className='px-3 py-1 bg-black/5 rounded-full'; span.textContent=v; list.appendChild(span);
+  document.getElementById('hauptkategorie-input').value='';
+});
+document.getElementById('unterkategorie-btn')?.addEventListener('click', ()=>{
+  const parent = document.getElementById('unterkategorie-parent').value;
+  const name = document.getElementById('unterkategorie-input').value.trim();
+  if(!name) return;
+  const list = document.getElementById('unterkategorien-liste');
+  const span = document.createElement('span'); span.className='px-3 py-1 bg-black/5 rounded-full'; span.textContent=(parent?parent+' > ':'')+name; list.appendChild(span);
+  document.getElementById('unterkategorie-input').value='';
+});
+</script>
+
+</body>
+</html>
