@@ -154,6 +154,13 @@ document.getElementById('unterkategorie-btn')?.addEventListener('click', ()=>{
   document.getElementById('unterkategorie-input').value='';
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://psncavcuqmzvgceqrsdk.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_gg3D7-4artCv2CJzVPwB6Q_lneYpTRw';
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
 
 </body>
 </html>
